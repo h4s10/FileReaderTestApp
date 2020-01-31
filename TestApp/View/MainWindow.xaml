@@ -1,0 +1,20 @@
+﻿<Window x:Class="TestApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="File searcher" Height="450" Width="800">
+    <Grid>
+        <StackPanel Orientation="Vertical">
+            <StackPanel Margin="10" Orientation="Horizontal">
+                <Button Content="Read Files" Command="{Binding ReadFilesInDirectoryCommand}" Width="100" Margin="0,0,10,0"/>
+                <Button Content="Save to file" Command="{Binding SaveToFileCommand}" IsEnabled="{Binding ItemsSource, ElementName=FileItems, TargetNullValue=False}" Width="100"/>
+            </StackPanel>
+            <DataGrid ItemsSource="{Binding FilesCollection, Mode=OneWay}"
+                      x:Name="FileItems"
+                      CanUserAddRows="False"
+                      CanUserDeleteRows="False"/>
+        </StackPanel>
+    </Grid>
+</Window>
