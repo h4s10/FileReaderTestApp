@@ -1,40 +1,52 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Windows;
+using System.Xml;
 
 namespace TestApp
 {
     public class HTMLFileFormatt : IFileCreator<FileInformation>
     {
-        public bool Save(List<FileInformation> fileCollection)
+        public void Save(IEnumerable<FileInformation> fileCollection)
         {
             try
             {
                 using (StreamWriter fs = File.CreateText(Directory.GetCurrentDirectory() + @"\index.html"))
-                {
-                    fs.WriteLine("<table border = \"1\">");
-
-                    fs.WriteLine("<tr>");
-                    foreach (var prop in fileCollection[0].GetType().GetProperties())
-                        fs.WriteLine(string.Format("<th>{0}</th>", prop));
-                    fs.WriteLine("</tr>");
-
+                {               
+                    var doc = new XmlDocument();
+                    var table = doc.CreateElement("table");
+                    table.AppendChild(doc.CreateElement("tr"));
+                    foreach (var prop in fileCollection.First().GetType().GetProperties())
+                    {
+                        var table_head = doc.CreateElement("th");
+                        table_head.AppendChild(doc.CreateTextNode(prop.Name));
+                        table.ChildNodes[0].AppendChild(table_head);
+                    }
                     foreach (var fileInfo in fileCollection)
                     {
-                        fs.WriteLine("<tr>");
-                        foreach (var prop in fileCollection[0].GetType().GetProperties())
-                            fs.WriteLine(string.Format("<td>{0}</td>", prop.GetValue(fileInfo)));
-                        fs.WriteLine("</tr>");
+                        var table_row = doc.CreateElement("tr");
+                        foreach (var prop in fileCollection.First().GetType().GetProperties())
+                        {
+                            var td = doc.CreateElement("td");
+                            td.AppendChild(doc.CreateTextNode(prop.GetValue(fileInfo).ToString()));
+                            table_row.AppendChild(td);
+                        }
+                        table.AppendChild(table_row);
                     }
-
-                    fs.WriteLine("</table>");
+                    var root = doc.CreateElement("html");
+                    var body = doc.CreateElement("body");
+                    body.AppendChild(table);
+                    root.AppendChild(body);
+                    doc.AppendChild(root);
+                    fs.WriteLine(doc.OuterXml);
                     fs.Close();
                 }
-                return true;
             }
-            catch
+            catch (Exception ex)
             {
-                return false;
+                MessageBox.Show(ex.ToString());
             }
         }
     }

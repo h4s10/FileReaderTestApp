@@ -12,8 +12,8 @@ namespace TestApp
     public class MainWindowViewModel : ObservableObject
     {
         #region Commands
-        public ICommand ReadFilesInDirectoryCommand { get; set; }
-        public ICommand SaveToFileCommand { get; set; }
+        public ICommand ReadFilesInDirectoryCommand { get; }
+        public ICommand SaveToFileCommand { get; }
         #endregion Commands
 
         #region Properties

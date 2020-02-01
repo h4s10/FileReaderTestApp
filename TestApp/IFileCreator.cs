@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace TestApp
 {
@@ -12,6 +8,6 @@ namespace TestApp
     /// <typeparam name="T"></typeparam>
     public interface IFileCreator<T>
     {
-        bool Save(List<T> fileCollection);
+        void Save(IEnumerable<T> fileCollection);
     }
 }
